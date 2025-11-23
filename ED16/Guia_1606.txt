@@ -1,0 +1,30 @@
+; Guia_1606.txt
+; Quadrado de um numero (soma de impares)
+; Resultado em 16 bits (HL)
+
+    .ORG 8000H
+
+INICIO:
+    LXI H, 0000H    ; HL = Resultado acumulado
+    LDA 0100H       ; Carrega N
+    MOV C, A        ; C = Contador de loops
+    
+    MVI E, 01H      ; E = Primeiro numero impar (1)
+    MVI D, 00H      ; D = 0 (para somar DE em HL)
+
+LOOP_QD:
+    DAD D           ; HL = HL + DE (Soma o impar atual)
+    
+    ; Prepara proximo impar (Atual + 2)
+    MOV A, E
+    ADI 02H
+    MOV E, A
+    JNC CONT
+    INR D           ; Trata carry se impar passar de 255
+
+CONT:
+    DCR C
+    JNZ LOOP_QD
+
+    SHLD 0102H      ; Salva 16 bits
+    HLT

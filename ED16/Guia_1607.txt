@@ -1,0 +1,50 @@
+; Guia_1607.txt
+; Calculo de Fatorial (N!) usando subrotina
+; Entrada: 0100H, Saida: 0102H (16 bits)
+
+    .ORG 8000H
+    JMP MAIN
+
+; --- Funcao Multiplicacao (HL = HL * C) ---
+; Entrada: Valor atual em HL, Multiplicador em C
+; Saida: Novo valor em HL
+F_MULT:
+    PUSH B          ; Salva contexto
+    PUSH D
+    
+    MOV B, H        ; Move valor atual (HL) para DE 
+    MOV E, L        ; para usar DAD D nas somas
+    MOV D, B
+    
+    LXI H, 0000H    ; Zera acumulador de soma
+    
+    ; C ja eh o contador da multiplicacao
+F_LOOP:
+    DAD D           ; Soma sucessiva
+    DCR C
+    JNZ F_LOOP
+    
+    POP D           ; Restaura contexto
+    POP B
+    RET
+
+; --- Programa Principal ---
+MAIN:
+    LDA 0100H       ; Carrega N
+    MOV C, A        ; C = N (Contador do fatorial)
+    
+    LXI H, 0001H    ; Fatorial comeca em 1
+
+FAT_LOOP:
+    MOV A, C
+    CPI 01H         ; Se contador <= 1, acabou
+    JZ FIM
+    
+    CALL F_MULT     ; HL = HL * C
+    
+    DCR C           ; Decrementa N
+    JMP FAT_LOOP
+
+FIM:
+    SHLD 0102H      ; Salva resultado 16 bits
+    HLT

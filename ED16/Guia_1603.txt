@@ -1,0 +1,30 @@
+; Guia_1603.txt
+; Calculo do resto (dado01 % dado02)
+
+    .ORG 8000H
+
+INICIO:
+    LDA 0100H       ; A = dividendo
+    MOV B, A
+    
+    LDA 0101H       ; D = divisor
+    MOV D, A
+
+    ; Verifica divisao por zero
+    ORA A
+    JZ FIM
+
+LOOP_MOD:
+    MOV A, B
+    CMP D           ; A < D?
+    JC SALVA        ; Se sim, A eh o resto
+
+    SUB D           ; Subtrai divisor
+    MOV B, A        ; Atualiza resto
+    JMP LOOP_MOD
+
+SALVA:
+    STA 0102H       ; Salva o resto em dado03
+
+FIM:
+    HLT

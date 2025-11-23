@@ -1,0 +1,37 @@
+; Guia_1602.txt
+; Calculo do quociente (dado01 / dado02)
+; Metodo: Subtracoes sucessivas
+
+    .ORG 8000H
+
+INICIO:
+    ; Carrega dividendo (dado01)
+    LDA 0100H
+    MOV B, A        ; B = dividendo temporario
+
+    ; Carrega divisor (dado02)
+    LDA 0101H
+    MOV D, A        ; D = divisor
+
+    MVI C, 00H      ; C = quociente (contador)
+
+    ; Verifica divisao por zero
+    ORA A
+    JZ FIM          ; Se divisor 0, encerra
+
+LOOP_DIV:
+    MOV A, B        ; A = resto atual
+    CMP D           ; Compara resto com divisor
+    JC SALVA        ; Se Resto < Divisor, fim (Carry=1)
+
+    SUB D           ; A = A - D
+    MOV B, A        ; Atualiza resto
+    INR C           ; Incrementa quociente
+    JMP LOOP_DIV
+
+SALVA:
+    MOV A, C
+    STA 0102H       ; Salva quociente em dado03
+
+FIM:
+    HLT

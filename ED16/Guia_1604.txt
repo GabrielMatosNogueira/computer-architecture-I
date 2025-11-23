@@ -1,0 +1,28 @@
+; Guia_1604.txt
+; Encontrar menor valor de um arranjo
+; 0100H = Tamanho, 0101H... = Dados
+
+    .ORG 8000H
+
+INICIO:
+    LDA 0100H       ; Carrega tamanho do arranjo
+    MOV C, A        ; C = contador
+    DCR C           ; Ajusta para loop (N-1 comparacoes)
+    
+    LXI H, 0101H    ; H aponta para primeiro elemento
+    MOV A, M        ; A = Menor valor atual (inicializa com o 1o)
+
+LOOP_BUSCA:
+    INX H           ; Aponta proximo dado
+    CMP M           ; Compara (A - Memoria)
+    JC PROXIMO      ; Se A < M (Carry=1), mantem A
+    
+    MOV A, M        ; Senao, novo menor eh M
+
+PROXIMO:
+    DCR C
+    JNZ LOOP_BUSCA
+
+SALVA:
+    STA 0105H       ; Salva menor valor encontrado (ex: em 0105H)
+    HLT

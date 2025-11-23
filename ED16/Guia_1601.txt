@@ -1,0 +1,36 @@
+// Guia_1601.txt
+// Objetivo: Calcular o produto de dois dados de 8 bits (dado01 * dado02)
+// Método: Somas sucessivas
+// Saída: Resultado de 16 bits armazenado em dado03
+// --- Definição de Endereços de Memória (Exemplo) ---
+// Vamos assumir que os dados estão nestes endereços para teste:
+// 0100H -> dado01 (Multiplicando)
+// 0101H -> dado02 (Multiplicador / Contador)
+// 0102H -> dado03 (Resultado - Parte Baixa)
+// 0103H -> dado03 (Resultado - Parte Alta)
+// Origem do programa
+// 1. Inicializar o Resultado (HL) com 0
+# ORG 8000H
+
+INICIO:	   LXI H,0000	// HL = 0 (Será o nosso acumulador de 16 bits)
+// 2. Preparar o Multiplicando (dado01) no par DE
+	   LDA 0100	// Carrega dado01 da memória para o Acumulador (A)
+	   MOV E,A	// Move o valor para o registrador E
+	   MVI D,00	// Zera o registrador D
+// Agora o par DE contém o valor de dado01 expandido para 16 bits
+// 3. Preparar o Multiplicador (dado02) como Contador em C
+	   LDA 0101	// Carrega dado02 da memória
+	   MOV C,A	// Move para C (será usado como contador de loops)
+// 4. Verificar caso especial: Multiplicação por 0
+	   CPI 00	// Compara o contador com 0
+	   JZ SALVA_RES	// Se for 0, pula direto para salvar (Resultado já é 0 em HL)
+// 5. Realizar a soma (Somas Sucessivas)
+
+LOOP_SOMA:	   DAD D	// HL = HL + DE (Adiciona dado01 ao total acumulado)
+// 6. Controle do Loop
+	   DCR C	// Decrementa o contador (dado02)
+	   JNZ LOOP_SOMA	// Se C não for zero (Zero Flag = 0), volta para somar novamente
+// 7. Armazenar o resultado de 16 bits na memória (dado03)
+
+SALVA_RES:	   SHLD 0102	// Armazena L em 0102H e H em 0103H
+	   HLT	// Fim da execução
