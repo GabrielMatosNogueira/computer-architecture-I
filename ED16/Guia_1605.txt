@@ -1,54 +1,30 @@
 ; Guia_1605.txt
-; Conversao BCD para Hexadecimal
-; Formula: (High * 10) + Low
+; Conversao BCD para Hex
 
     .ORG 8000H
 
-INICIO:
-    LDA 0100H       ; Carrega valor BCD (ex: 24h)
-    MOV B, A        ; Salva copia em B
+    LDA 0100H    ; Pega o valor BCD
+    MOV B, A     ; Salva backup em B
 
-    ; Isola nibble alto
-    ANI F0H
+    ANI F0H      ; Isola a parte alta
     RRC
     RRC
     RRC
-    RRC             ; Agora A = Digito da dezena (ex: 02h)
-    
-    ; Multiplica dezena por 10 (x8 + x2)
-    MOV D, A        ; D = x
-    ADD A           ; A = 2x
-    ADD A           ; A = 4x
-    ADD A           ; A = 8x
-    ADD D           ; A = 8x + 2x (ja que D era x, nao, espere)
-                    ; Correcao rapida mul por 10:
-    MOV D, A        ; A=8x. Opa, vamos refazer simples.
-    
-    ; Logica limpa mul 10:
-    ; A ja tem o nibble (ex: 2). 
-    MOV D, A        ; D = 2
-    ADD A           ; A = 4
-    ADD A           ; A = 8
-    ADD D           ; A = 10 (8+2). Isso mesmo.
-    ADD D           ; A = 12 (Wait, D era o original). 
-    
-    ; Reiniciando bloco Mul por 10 para clareza:
-    ; Temos A = nibble alto.
-    MOV D, A        ; D = N
-    ADD A           ; A = 2N
-    MOV E, A        ; E = 2N
-    ADD A           ; A = 4N
-    ADD A           ; A = 8N
-    ADD E           ; A = 8N + 2N = 10N. Feito.
-    
-    MOV D, A        ; D = Resultado da parte alta
+    RRC          ; Shift para mover a dezena para o inicio
 
-    ; Isola nibble baixo
-    MOV A, B        ; Recupera original
-    ANI 0FH         ; Mascara F0 sai
+    ; Multiplica por 10 (usando x2 + x8)
+    ADD A        ; x2
+    MOV E, A     ; Guarda no E
+    ADD A        ;
+    ADD A        ; 
+    ADD E        ; 
     
-    ; Soma final
-    ADD D           ; Hex = Baixo + (Alto*10)
-    
-    STA 0101H       ; Salva resultado
+    MOV D, A     ; D 
+
+    MOV A, B     ; Recupera o valor original
+    ANI 0FH      ; Limpa a parte alta, deixa so a unidade
+
+    ADD D        ; Soma unidade + dezena convertida
+
+    STA 0101H    ; Guarda resultado
     HLT

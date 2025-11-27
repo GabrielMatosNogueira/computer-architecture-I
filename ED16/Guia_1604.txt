@@ -1,28 +1,25 @@
 ; Guia_1604.txt
-; Encontrar menor valor de um arranjo
-; 0100H = Tamanho, 0101H... = Dados
+; Encontrar o menor valor do vetor
 
     .ORG 8000H
 
-INICIO:
-    LDA 0100H       ; Carrega tamanho do arranjo
-    MOV C, A        ; C = contador
-    DCR C           ; Ajusta para loop (N-1 comparacoes)
+    LDA 0100H    ; Carrega o tamanho do vetor
+    MOV C, A     ; C = contador do loop
+    DCR C        ; Decrementa 1 (n-1)
     
-    LXI H, 0101H    ; H aponta para primeiro elemento
-    MOV A, M        ; A = Menor valor atual (inicializa com o 1o)
+    LXI H, 0101H ; HL aponta para o inicio dos dados
+    MOV A, M     ; Inicializa o 'min' com o primeiro valor
 
-LOOP_BUSCA:
-    INX H           ; Aponta proximo dado
-    CMP M           ; Compara (A - Memoria)
-    JC PROXIMO      ; Se A < M (Carry=1), mantem A
+LOOP:
+    INX H        ; Aponta para o proximo dado
+    CMP M        ; Compara A com a Memoria
+    JC SKIP      ; Se A < M (Carry), pula a troca
     
-    MOV A, M        ; Senao, novo menor eh M
+    MOV A, M     ; Se nao, atualiza o novo menor
 
-PROXIMO:
-    DCR C
-    JNZ LOOP_BUSCA
+SKIP:
+    DCR C        ; Decrementa o contador
+    JNZ LOOP     ; Se C != 0, repete o loop
 
-SALVA:
-    STA 0105H       ; Salva menor valor encontrado (ex: em 0105H)
+    STA 0105H    ; Armazena o resultado final
     HLT

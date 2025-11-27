@@ -42,27 +42,249 @@ bt . c' (at' + at) = bt . c'
 at' . bt + bt . c
 at' . bt . c
 
-(Conferi no Gemini e ele disse que a simplificação estava errada)
+(... Errado?)
 
 at' . c . (bt' + bt) = at' . c (Mas em 3 não há bt'...)
 
+
+b. SoP (Jb)
+(Transição 0->1 em B: m1. Don't Cares: 2, 3, 6, 7) 
+Agrupamento m1(001) com X3(011) -> at' . c
+Resultado: at' . c
+
+SoP (Kb)
+Transição 1->0 em B: m2, m7. Don't Cares: 0, 1, 4, 5
+Agrupamento m2(010) com X0(000) =    at' . c' 
+Agrupamento m7(111) com X5(101) = at . c 
+at' . c' + at . c
+
+c.
+SoP (Ta)
+Mudança de estado em A: 3, 5
+SoP (Ta) = (3, 5) (3) (5) at' . bt . c + at . bt' . c c . (at' . bt + at . bt')
+c . (at XOR bt)
+
+SoP (Tb)
+Mudança de estado em B: 1, 2, 7
+SoP (Tb) = (1, 2, 7) (1) (2) (7) at' . bt' . c + at' . bt . c' + at . bt . c 
+at' . bt' . c + at' . bt . c' + at . bt . c
+
+
+=====================================================================================================
+
+02.
+
+a.
+(Quando Da for igual a 0)
+PoS (Da) = (0, 1, 2, 5)
+
+    (0)             (1)             (2)             (5)
+(at+bt+c) .     (at+bt+c') .    (at+bt'+c) .    (at'+bt+c')
+
+
+b.
+(Quando Ja for igual a 0 - Transições 0->0 e 0->X)
+(Lembrando: Ja olha onde at=0. Se for p/ 0, Ja=0. Se at=1, é Don't Care)
+PoS (Ja) = (0, 1, 2)
+
+    (0)             (1)             (2)
+(at+bt+c)    .  (at+bt+c')   .  (at+bt'+c)
+
+
+(Quando Ka for igual a 0 - Transições 1->1 e 1->X)
+(Lembrando: Ka olha onde at=1. Se for p/ 1, Ka=0. Se at=0, é Don't Care)
+PoS (Ka) = (4, 6, 7)
+
+    (4)             (6)             (7)
+(at'+bt+c)  .   (at'+bt'+c)   . (at'+bt'+c')
+
+
+c.
+(Quando Ta for igual a 0 - Onde at NÃO muda de estado)
+PoS (Ta) = (0, 1, 2, 4, 6, 7)
+
+    (0)             (1)             (2)             (4)             (6)             (7)
+(at+bt+c)   .   (at+bt+c')     . (at+bt'+c)   .  (at'+bt+c) . (at'+bt'+c) . (at'+bt'+c')
+
+(Quando Db for igual a 0)
+PoS (Db) = (0, 2, 4, 5, 7)
+
+    (0)             (2)             (4)
+(at+bt+c) . (at+bt'+c) . (at'+bt+c) . 
+
+    (5)             (7)
+(at'+bt+c') . (at'+bt'+c')
+
+
+(Quando Jb for igual a 0 - Onde bt=0 e vai para 0)
+PoS (Jb) = (0, 4, 5)
+
+    (0)             (4)             (5)
+(at+bt+c) . (at'+bt+c) . (at'+bt+c')
+
+
+(Quando Kb for igual a 0 - Onde bt=1 e vai para 1)
+PoS (Kb) = (3, 6)
+
+    (3)             (6)
+(at+bt'+c') . (at'+bt'+c)
+
+
+(Quando Tb for igual a 0 - Onde bt NÃO muda de estado)
+PoS (Tb) = (0, 3, 4, 5, 6)
+
+    (0)             (3)             (4)
+(at+bt+c) . (at+bt'+c') . (at'+bt+c) . 
+
+    (5)             (6)
+(at'+bt+c') . (at'+bt'+c)
+
+=====================================================================================================
+
+03. Mapas de Veitch-Karnaugh e Simplificação (SoP)
+
 -----------------------------------------------------------------------------------------------------
+Da
+ab\c  0   1
+      
+      0   1
+00    0   0
+01    0   1
+11    1   1
+10    1   0
 
-b. SoP (Ja)
-SoP (Ja) = (3,4,6,7)
+Expressão: bc + ac'
 
-	(3)	(4)
-at' . bt . c + 
+-----------------------------------------------------------------------------------------------------
+Sa
+(Mintermo: 3. Don't Cares: 4, 6, 7)
+ab\c
+      0   1
+00    0   0
+01    0   1
+11    x   x
+10    x   0
+
+Expressão: bc
+
+-----------------------------------------------------------------------------------------------------
+Ra
+(Mintermo: 5. Don't Cares: 0, 1, 2)
+ab\c
+      0   1
+00    x   x
+01    x   0
+11    0   0
+10    0   1
+
+Expressão: b'c
+
+-----------------------------------------------------------------------------------------------------
+Ta
+(Mintermos: 3, 5)
+ab\c
+      0   1
+00    0   0
+01    0   1
+11    0   0
+10    0   1
+
+Expressão: c(a XOR b)   [ou a'bc + ab'c]
+
+-----------------------------------------------------------------------------------------------------
+Db
+ab\c
+      0   1
+00    0   1
+01    0   1
+11    1   0
+10    0   0
+
+Expressão: a'c + abc'
+
+-----------------------------------------------------------------------------------------------------
+Sb
+(Mintermo: 1. Don't Cares: 3, 6)
+ab\c
+      0   1
+00    0   1
+01    0   x
+11    x   0
+10    0   0
+
+Expressão: a'c
+
+-----------------------------------------------------------------------------------------------------
+Rb
+(Mintermos: 2, 7. Don't Cares: 0, 4, 5)
+ab\c
+      0   1
+00    x   0
+01    1   0
+11    0   1
+10    x   x
+
+Expressão: a'c' + ac   [ou a XNOR c]
+
+-----------------------------------------------------------------------------------------------------
+Tb
+(Mintermos: 1, 2, 7)
+ab\c
+      0   1
+00    0   1
+01    1   0
+11    0   1
+10    0   0
+
+Expressão: a'b'c + a'bc' + abc
+
+-----------------------------------------------------------------------------------------------------
+Ja
+(Mesmo mapa de Sa, mas com mais Don't Cares. Resultado idêntico)
+ab\c
+      0   1
+00    0   0
+01    0   1
+11    x   x
+10    x   x
+
+Expressão: bc
+
+-----------------------------------------------------------------------------------------------------
+Ka
+(Mesmo mapa de Ra, mas com mais Don't Cares. Resultado idêntico)
+ab\c
+      0   1
+00    x   x
+01    x   x
+11    0   0
+10    0   1
+
+Expressão: b'c
+
+-----------------------------------------------------------------------------------------------------
+Jb
+(Mesmo mapa de Sb, mas com mais Don't Cares. Resultado idêntico)
+ab\c
+      0   1
+00    0   1
+01    x   x
+11    x   x
+10    0   0
+
+Expressão: a'c
+
+-----------------------------------------------------------------------------------------------------
+Kb
+(Mesmo mapa de Rb, mas com mais Don't Cares. Resultado idêntico)
+ab\c
+      0   1
+00    x   x
+01    1   0
+11    0   1
+10    x   x
+
+Expressão: a'c' + ac
 
 
-=====================================================================================================
-
-02. 
-
-=====================================================================================================
-
-03.
-
-=====================================================================================================
-
-04. 
+LOGISIM ainda em andamento

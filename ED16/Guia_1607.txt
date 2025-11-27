@@ -1,50 +1,43 @@
 ; Guia_1607.txt
-; Calculo de Fatorial (N!) usando subrotina
-; Entrada: 0100H, Saida: 0102H (16 bits)
+; Calculo de Fatorial (N!) com subrotina
 
     .ORG 8000H
     JMP MAIN
 
-; --- Funcao Multiplicacao (HL = HL * C) ---
-; Entrada: Valor atual em HL, Multiplicador em C
-; Saida: Novo valor em HL
-F_MULT:
-    PUSH B          ; Salva contexto
+MULT:
+    PUSH B       ; Salva os registradores para nao estragar o loop principal
     PUSH D
     
-    MOV B, H        ; Move valor atual (HL) para DE 
-    MOV E, L        ; para usar DAD D nas somas
-    MOV D, B
+    MOV D, H     ; Copia o valor atual (HL) para DE
+    MOV E, L     ; porque o DAD soma DE no HL
     
-    LXI H, 0000H    ; Zera acumulador de soma
+    LXI H, 0000H ; Zera o HL para usar como acumulador da soma
     
-    ; C ja eh o contador da multiplicacao
-F_LOOP:
-    DAD D           ; Soma sucessiva
-    DCR C
-    JNZ F_LOOP
+MLOOP:
+    DAD D        ; Soma o valor original
+    DCR C        ; Decrementa contador da multiplicacao
+    JNZ MLOOP    ; Repete ate somar C vezes
     
-    POP D           ; Restaura contexto
+    POP D        ; Recupera os valores antigos
     POP B
     RET
 
-; --- Programa Principal ---
 MAIN:
-    LDA 0100H       ; Carrega N
-    MOV C, A        ; C = N (Contador do fatorial)
+    LDA 0100H    ; Carrega o N
+    MOV C, A     ; C controla o fatorial
     
-    LXI H, 0001H    ; Fatorial comeca em 1
+    LXI H, 0001H ; Comeca com 1
 
-FAT_LOOP:
+LOOP:
     MOV A, C
-    CPI 01H         ; Se contador <= 1, acabou
-    JZ FIM
+    CPI 01H      ; Ve se ja chegou no 1
+    JZ DONE      ; Se sim, acabou
     
-    CALL F_MULT     ; HL = HL * C
+    CALL MULT    ; Faz HL = HL * C
     
-    DCR C           ; Decrementa N
-    JMP FAT_LOOP
+    DCR C        ; Decrementa o numero do fatorial
+    JMP LOOP     ; Volta pro loop
 
-FIM:
-    SHLD 0102H      ; Salva resultado 16 bits
+DONE:
+    SHLD 0102H   ; Salva o resultado final (16 bits)
     HLT
