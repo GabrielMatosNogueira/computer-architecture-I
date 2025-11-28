@@ -1,4 +1,4 @@
-# Arquitetura de Computadores
+# Arquitetura de Computadores I
 
 | | |
 | :--- | :--- |
@@ -26,3 +26,4 @@ A bibliografia principal recomendada para esta disciplina é:
 
 * **Patterson, D. A., & Hennessy, J. L.** *Organização e Projeto de Computadores: A Interface Hardware/Software*. 2ª Edição. LTC.
     * *Obra de referência fundamental que estabelece a conexão entre a arquitetura do hardware e a execução de software, sendo a base para grande parte do curso.*
+
