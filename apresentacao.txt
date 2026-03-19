@@ -1,5 +1,0 @@
-Inicio/Termino		Tempo		Parte
-					Apresentação
-					Introdução
-					Detalhes da Solução
-					Aplicativo
